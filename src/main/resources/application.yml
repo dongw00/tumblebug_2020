@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: local
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  h2:
+    console:
+      enabled: true
+
+logging:
+  level:
+    org.hibernate:
+      SQL: DEBUG
