@@ -20,7 +20,7 @@ public class CreateProject {
     @ApiModelProperty(value = "프로젝트 제목", example = "시각예술 작가로 부터 온 최소한의 작품")
     private String title;
 
-    @Pattern(regexp = "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z~!@#$%^&*()_+|<>?:{}.,\\s]+$", message = "프로젝트 설명은 한글, 숫자, 영문, 특수문자만 가능합니다.")
+    @Pattern(regexp = "^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z~!@#$%^&*()₩_+|<>?:{}.,'\"`\\s]+$", message = "프로젝트 설명은 한글, 숫자, 영문, 특수문자만 가능합니다.")
     @NotBlank(message = "프로젝트 설명은 필수로 입력 해야 합니다.")
     @Length(max = 255, message = "프로젝트 설명은 255자 이내 입니다.")
     @ApiModelProperty(value = "프로젝트 설명", example = "여백이나 그림들이 들어있는 하나의 통일된 형태의 낱장들을 모아서 한쪽을 묶어 놓은 것' 으로 정의되고 있습니다.")

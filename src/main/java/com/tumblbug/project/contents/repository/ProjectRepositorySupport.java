@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+import static com.tumblbug.project.common.enums.ErrorCode.NOT_EXISTS_PROJECT;
 import static com.tumblbug.project.contents.model.QCreator.creator;
 import static com.tumblbug.project.contents.model.QProject.project;
 
@@ -40,21 +41,19 @@ public class ProjectRepositorySupport extends QuerydslRepositorySupport {
         return new PageImpl<>(projectDtoList, pageable, query.fetchCount());
     }
 
+    /**
+     * 프로젝트 정보
+     *
+     * @param uuid 프로젝트 UUID
+     * @return
+     */
     public ProjectDto getProjectDetail(final UUID uuid) {
         BooleanExpression filter = project.enabled.isTrue()
                 .and(project.id.eq(uuid));
         Project projectEntity = new JPAQueryFactory(getEntityManager()).selectFrom(project).where(filter).fetchOne();
         if (projectEntity == null) {
-            throw new NoSuchElementException("존재하지 않는 프로젝트입니다.");
+            throw new NoSuchElementException(NOT_EXISTS_PROJECT.getMessage());
         }
         return new ProjectDto(projectEntity);
     }
-
-//    public ProjectDto getProjectDetail(final UUID uuid) {
-//        try {
-//            return
-//        } catch (Exception e) {
-//            log.error("");
-//        }
-//    }
 }

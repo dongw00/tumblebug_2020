@@ -45,9 +45,9 @@ public class ProjectDto {
     public ProjectDto(Project project, Creator creator) {
         this.title = project.getTitle();
         this.creatorName = creator.getName();
-        this.donationTarget = project.getDonationTargetAmount();
-        this.donationCount = project.getDonationCount();
-        this.donationAmount = project.getDonationAmount();
+        this.donationTarget = project.getDTargetAmount();
+        this.donationCount = project.getDCount();
+        this.donationAmount = project.getDAmount();
         this.status = project.getStatus().getDescription();
         this.startDate = project.getStartDate();
         this.endDate = project.getEndDate();
@@ -56,9 +56,9 @@ public class ProjectDto {
     public ProjectDto(Project project) {
         this.title = project.getTitle();
         this.creatorName = project.getCreator().getName();
-        this.donationTarget = project.getDonationTargetAmount();
-        this.donationCount = project.getDonationCount();
-        this.donationAmount = project.getDonationAmount();
+        this.donationTarget = project.getDTargetAmount();
+        this.donationCount = project.getDCount();
+        this.donationAmount = project.getDAmount();
         this.status = project.getStatus().getDescription();
         this.startDate = project.getStartDate();
         this.endDate = project.getEndDate();

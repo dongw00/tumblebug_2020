@@ -34,7 +34,7 @@ public class ProjectService {
      * @param pageable
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public Page<ProjectDto> getProjectList(final Pageable pageable) {
         return projectRepositorySupport.getProjectList(pageable);
     }
@@ -45,7 +45,7 @@ public class ProjectService {
      * @param uuid 프로젝트 id
      * @return
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public ProjectDto getProjectDetail(final UUID uuid) {
         return projectRepositorySupport.getProjectDetail(uuid);
     }
@@ -63,7 +63,7 @@ public class ProjectService {
 
         projectRepository.save(Project.builder().title(req.getTitle()).description(req.getDescription())
                 .creator(creator).startDate(req.getStartDate()).endDate(req.getEndDate())
-                .donationTargetAmount(req.getDonationTargetAmount()).build());
+                .dTargetAmount(req.getDonationTargetAmount()).build());
     }
 
     /**

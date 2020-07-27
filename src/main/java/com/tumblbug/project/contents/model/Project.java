@@ -4,6 +4,7 @@ import com.tumblbug.project.common.converters.BooleanConverter;
 import com.tumblbug.project.common.enums.Status;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -15,6 +16,7 @@ import static com.tumblbug.project.common.enums.Status.*;
 
 @Getter
 @Entity
+@DynamicUpdate
 public class Project {
 
     @Id
@@ -40,13 +42,15 @@ public class Project {
     private Status status;
 
     @Column(name = "donation_target_amount")
-    private int donationTargetAmount;
+    private int dTargetAmount;
 
+    @Column(name = "donation_amount")
     @Formula("(select ifnull(sum(d.amount), 0) from Donation d where d.project_id = id)")
-    private Integer donationAmount;
+    private Integer dAmount;
 
+    @Column(name = "donation_count")
     @Formula("(select count(*) from Donation d where d.project_id = id)")
-    private Integer donationCount;
+    private Integer dCount;
 
     @Convert(converter = BooleanConverter.class)
     private boolean enabled;
@@ -56,23 +60,36 @@ public class Project {
     }
 
     @Builder
-    public Project(String title, String description, Creator creator, LocalDateTime startDate, LocalDateTime endDate, int donationTargetAmount) {
+    public Project(String title, String description, Creator creator, LocalDateTime startDate, LocalDateTime endDate, int dTargetAmount) {
         this();
         this.title = title;
         this.description = description;
         this.creator = creator;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.donationTargetAmount = donationTargetAmount;
-        this.donationAmount = donationAmount == null ? 0 : donationAmount;
-        this.donationCount = donationCount == null ? 0 : donationCount;
+        this.dTargetAmount = dTargetAmount;
+        this.dAmount = dAmount == null ? 0 : dAmount;
+        this.dCount = dCount == null ? 0 : dCount;
 
-        changeStatus(startDate, endDate, donationAmount, donationTargetAmount);
+        changeStatus(startDate, endDate, dAmount, dTargetAmount);
     }
 
+    @PostLoad
+    public void postLoad() {
+        changeStatus(startDate, endDate, dAmount, dTargetAmount);
+    }
+
+    /**
+     * 게시판 속성 변경
+     *
+     * @param startDate            프로젝트 시작일
+     * @param endDate              프로젝트 종료일
+     * @param donationAmount       후원액
+     * @param donationTargetAmount 후원 목표액
+     */
     public void changeStatus(LocalDateTime startDate, LocalDateTime endDate, int donationAmount, int donationTargetAmount) {
         LocalDateTime now = LocalDateTime.now();
-        if (now.isBefore(endDate)) {
+        if (now.isBefore(startDate)) {
             this.status = READY;
         } else if ((startDate.equals(now) || startDate.isBefore(now)) && now.isBefore(endDate)) {
             this.status = PENDING;
